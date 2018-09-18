@@ -184,7 +184,7 @@ end
 
 def big_shoe_rebounds
   players = get_all_players
-  
+
   biggest_shoe = players.reduce do |result, player_data|
     if(!result)
       result = player_data
@@ -197,3 +197,95 @@ def big_shoe_rebounds
 end
 
 puts team_names
+
+
+###Hashketball lecture###
+
+# def get_all_players
+#   #returns array of all players
+#   game_hash[:home][:players] + game_hash[:away][:players]
+# end
+#
+# def get_player_info(player_to_find)
+#   #finds matching players
+#   get_all_players.find do |player|
+#     player[:player_name] == player_to_find
+# end
+#
+# def num_points_scored(player_to_find)
+#   return get_player_info(player_to_find)[:shoe]
+# end
+#
+# def shoe_size(player_to_find)
+#   return get_player_info(player_to_find)(:shoe)
+# end
+#
+# def team_colors(team_name_to_find)
+#   #returns array of team colors
+#   game_hash.each do |location, team_info|
+#     if team_info[:team_name] == team_name_to_find
+#       return team_info[:colors]
+#     end
+#   end
+# end
+
+def gets_all_players
+  array_of_player_hashes = []
+  game_hash.each do |location, team|
+    team[:players].each do |player|
+      array_of_player_hashes << player
+    end
+  end
+  array_of_player_hashes
+end
+
+def most_points_scored
+points_array = []
+ # game_hash.each do |location, team|
+   # team[:players].each do |player|
+   #     players << player
+   #   end
+   # end
+player_with_max_points = gets_all_players.max_by{|player| player[:points]}
+
+   return player_with_max_points[:player_name]
+ end
+
+def winning_team
+  home_team_sum = 0
+  away_team_sum = 0
+  game_hash.each do |location, team|
+    if location == :home
+      home_team_points_array = team[:players].map do |player|
+        player[:points]
+      end
+      home_team_sum = home_team_points_array.inject(:+)
+    else
+      away_team_points_array = team[:players].map do |player|
+        player[:points]
+      end
+      away_team_sum = away_team_points_array.inject(:+)
+    end
+  end
+  if home_team_sum > away_team_sum
+    return game_hash[:home][:team_name]
+  else
+    return game_hash[:away][:team_name]
+  end
+end
+
+def player_with_longest_name
+players = []
+ game_hash.each do |location, team|
+   team[:players].each do |player|
+       players << player[:player_name]
+     end
+  end
+   return player_longest_name = players.max_by{|player| player.size}
+ end
+
+def long_name_steals_a_ton?
+  #returns true if player with longest names has the most steals
+  hash_of_player_with_max_steals = gets_all_players.max_by{|player| player[:steals]}
+  return player_with_longest_name == hash_of_player_with_max_steals[:player_name]
+end
